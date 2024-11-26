@@ -1,3 +1,4 @@
+from maze import get_walls, get_dimensions
 DIRECTIONS = ['N', 'E', 'S', 'W'] # North, East, South, West
 
 
@@ -68,6 +69,93 @@ def forward(runner):
     elif runner["orientation"] == "W":
         runner["position"] = (x - 1, y)
     return runner
+
+def sense_walls(runner: dict, maze: list) -> tuple:
+    x, y = runner["position"]
+    orientation = runner["orientation"]
+    walls = get_walls(maze, x, y)
+
+    if orientation == "N":
+        return walls[3], walls[0], walls[1]  # Left: West, Front: North, Right: East
+    elif orientation == "E":
+        return walls[0], walls[1], walls[2]  # Left: North, Front: East, Right: South
+    elif orientation == "S":
+        return walls[1], walls[2], walls[3]  # Left: East, Front: South, Right: West
+    elif orientation == "W":
+        return walls[2], walls[3], walls[0]  # Left: South, Front: West, Right: North
+
+
+def go_straight(runner: dict, maze: list) -> dict:
+    left, front, right = sense_walls(runner, maze)
+    if front:
+        raise ValueError("Cannot move forward. There is a wall in front.")
+    return forward(runner)
+
+
+def move(runner: dict, maze: list) -> tuple:
+    left, front, right = sense_walls(runner, maze)
+
+    if not left:
+        turn(runner, "Left")
+        return forward(runner), "LF"  # Turn Left, Go Forward
+    elif not front:
+        return forward(runner), "F"  # Go Forward
+    elif not right:
+        turn(runner, "Right")
+        return forward(runner), "RF"  # Turn Right, Go Forward
+    else:
+        turn(runner, "Left")
+        turn(runner, "Left")  # Turn around
+        return forward(runner), "LF"  # Turn Left twice, Go Forward
+
+
+def explore(runner: dict, maze: list, goal: tuple = None) -> str:
+    width, height = get_dimensions(maze)
+    if goal is None:
+        goal = (width - 1, 0)  # Default goal: top-right corner
+
+    actions = ""
+
+    while runner["position"] != goal:
+        runner, action = move(runner, maze)
+        actions += action
+
+    return actions
+
+
+def print_maze(maze: list, runner: dict) -> None:
+    width, height = len(maze), len(maze[0])
+    directions = {"N": "^", "E": ">", "S": "v", "W": "<"}
+    runner_x, runner_y = runner["position"]
+    runner_icon = directions[runner["orientation"]]
+
+    print("#" * (2 * width + 3))
+
+    for y in range(height):
+        row = "#"
+        for x in range(width):
+            if (x, y) == (runner_x, runner_y):
+                row += runner_icon
+            else:
+                row += "."
+            if x < width - 1 and get_walls(maze, x, y)[1]:  # East wall
+                row += "#"
+            else:
+                row += "."
+        row += "#"
+        print(row)
+
+        if y < height - 1:
+            row = "#"
+            for x in range(width):
+                if get_walls(maze, x, y)[2]:  # South wall
+                    row += "#."
+                else:
+                    row += ".."
+            row = row[:-1] + "#"
+            print(row)
+
+    print("#" * (2 * width + 3))
 
 #Some implementations for testing
 new_runner = create_runner(3,2,"E")

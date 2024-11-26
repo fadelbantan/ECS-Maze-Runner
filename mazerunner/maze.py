@@ -40,3 +40,4 @@ def add_vertical_wall(maze: List[List[Tuple[bool, bool, bool, bool]]], x: int, y
         maze[4][2] = (diagonal_cell[0], diagonal_cell[1], diagonal_cell[2], True)
 
     return maze
+
