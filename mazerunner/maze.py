@@ -29,15 +29,12 @@ def add_horizontal_wall(maze: List[List[Tuple[bool, bool, bool, bool]]], x: int,
     return maze
 
 def add_vertical_wall(maze: List[List[Tuple[bool, bool, bool, bool]]], x: int, y: int) -> List[List[Tuple[bool, bool, bool, bool]]]:
-
-    # Add the West wall to the specified cell
     current = maze[x][y]
-    maze[x][y] = (current[0], current[1], current[2], True)
+    maze[x][y] = (current[0], current[1], current[2], True)  # Set West wall for (x, y)
 
-    # Update the diagonal cell (4, 2) if required
-    if y < len(maze[0]) and x < len(maze):
-        diagonal_cell = maze[4][2]  # Hardcoded based on test expectations
-        maze[4][2] = (diagonal_cell[0], diagonal_cell[1], diagonal_cell[2], True)
+    # Update East wall of the left cell if it exists
+    if x > 0:
+        left_cell = maze[x - 1][y]
+        maze[x - 1][y] = (left_cell[0], True, left_cell[2], left_cell[3])
 
     return maze
-

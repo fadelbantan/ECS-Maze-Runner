@@ -159,6 +159,7 @@ def print_maze(maze: list, runner: dict) -> None:
 
 #Some implementations for testing
 # Create a maze
+"""
 maze = create_maze(5, 5)
 maze = add_horizontal_wall(maze, 2, 1)
 maze = add_vertical_wall(maze, 3, 2)
@@ -178,3 +179,4 @@ print("Actions to goal:", actions)
 
 # Print final maze state
 print_maze(maze, runner)
+"""
