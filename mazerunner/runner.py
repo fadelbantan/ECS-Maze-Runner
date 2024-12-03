@@ -1,4 +1,4 @@
-from maze import get_walls, get_dimensions
+from maze import *
 DIRECTIONS = ['N', 'E', 'S', 'W'] # North, East, South, West
 
 
@@ -85,7 +85,7 @@ def sense_walls(runner, maze) -> tuple:
         return walls[2], walls[3], walls[0]  # Left: South, Front: West, Right: North
 
 
-def go_straight(runner: dict, maze: list) -> dict:
+def go_straight(runner, maze) -> dict:
     left, front, right = sense_walls(runner, maze)
     if front:
         raise ValueError("Cannot move forward. There is a wall in front.")
@@ -158,7 +158,23 @@ def print_maze(maze: list, runner: dict) -> None:
     print("#" * (2 * width + 3))
 
 #Some implementations for testing
-new_runner = create_runner(3,2,"E")
-turn(new_runner, "Left")
-forward(new_runner)
-print(new_runner)
+# Create a maze
+maze = create_maze(5, 5)
+maze = add_horizontal_wall(maze, 2, 1)
+maze = add_vertical_wall(maze, 3, 2)
+
+# Create a runner
+runner = create_runner(0, 0, "E")
+
+# Print initial maze
+print_maze(maze, runner)
+
+# Sense walls
+print("Sense walls:", sense_walls(runner, maze))
+
+# Explore the maze
+actions = explore(runner, maze, (4, 4))
+print("Actions to goal:", actions)
+
+# Print final maze state
+print_maze(maze, runner)
