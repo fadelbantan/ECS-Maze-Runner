@@ -5,43 +5,43 @@ DIRECTIONS = ['N', 'E', 'S', 'W'] # North, East, South, West
 def create_runner(x: int = 0, y: int = 0, orientation: str = 'N'):
     """
     Create a runner
-    :param x: The x position in the grid
-    :param y: The y position in the grid
-    :param orientation: Which direction the runner is facing
-    :return: The runner's position as coordinates and orientation
+    param x: The x position in the grid
+    param y: The y position in the grid
+    param orientation: Which direction the runner is facing
+    return: The runner's position as coordinates and orientation
     """
     return {'position': (x, y), 'orientation': orientation}
 
 def get_x(runner) -> int:
     """
     Get the x position of the runner
-    :param runner: The runner including position and orientation
-    :return: The x position of the runner
+    param runner: The runner including position and orientation
+    return: The x position of the runner
     """
     return runner['position'][0]
 
 def get_y(runner) -> int:
     """
     Get the y position of the runner
-    :param runner: The runner including position and orientation
-    :return: The y position of the runner
+    param runner: The runner including position and orientation
+    return: The y position of the runner
     """
     return runner['position'][1]
 
 def get_orientation(runner) -> str:
     """
     Get the orientation of the runner
-    :param runner: The runner including position and orientation
-    :return: The runner's orientation
+    param runner: The runner including position and orientation
+    return: The runner's orientation
     """
     return runner['orientation']
 
 def turn(runner, direction: str) -> str:
     """
     Turn the runner on the given direction
-    :param runner: The runner including position and orientation
-    :param direction: Either Left or Right
-    :return: Runner with new direction
+    param runner: The runner including position and orientation
+    param direction: Either Left or Right
+    return: Runner with new direction
     """
     current_orientation = DIRECTIONS.index(runner["orientation"])
 
@@ -56,8 +56,8 @@ def turn(runner, direction: str) -> str:
 def forward(runner):
     """
     Move the runner forward one cell in the given direction
-    :param runner: The runner including position and orientation
-    :return: The runner having moved forward one cell
+    param runner: The runner including position and orientation
+    return: The runner having moved forward one cell
     """
     x, y = runner["position"]
     if runner["orientation"] == "N":
@@ -70,7 +70,7 @@ def forward(runner):
         runner["position"] = (x - 1, y)
     return runner
 
-def sense_walls(runner: dict, maze: list) -> tuple:
+def sense_walls(runner, maze) -> tuple:
     x, y = runner["position"]
     orientation = runner["orientation"]
     walls = get_walls(maze, x, y)
